@@ -119,7 +119,7 @@ public class Book {
                 ", name='" + name + '\'' +
                 ", ISBN='" + ISBN + '\'' +
                 ", lancamento=" + lancamento +
-                ", writers=" + writers +
+//                ", writers=" + writers +
                 '}';
     }
 }
