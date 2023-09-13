@@ -61,12 +61,12 @@ public class Book {
     }
 
     public Book addAuthor(Author a) {
-        this.getWriters().add(a);
+        writers.add(a);
         return this;
     }
 
     public Book removeAuthor(Author a) {
-        this.getWriters().remove(a);
+        writers.remove(a);
         return this;
     }
 
