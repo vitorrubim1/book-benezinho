@@ -17,8 +17,9 @@ public class Author {
     @Column(name = "ID_AUTHOR")
     private Long id;
 
-    @Column(name = "NM_AUTHOR", nullable = false)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "pessoa", referencedColumnName = "ID_PESSOA", foreignKey = @ForeignKey(name = "FK_PESSOA_AUTHOR"))
+    private PessoaFisica pessoa;
 
     @ManyToMany(mappedBy = "writers", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @OrderBy("name asc")
@@ -28,30 +29,30 @@ public class Author {
         obras = new LinkedHashSet<>();
     }
 
-    public Author(String name) {
-        this.name = name;
+    public Author(PessoaFisica pessoa) {
+        this.pessoa = pessoa;
         obras = new LinkedHashSet<>();
     }
 
-    public Author(Long id, String name, Set<Book> obras) {
+    public Author(Long id, PessoaFisica pessoa, Set<Book> obras) {
         this.id = id;
-        this.name = name;
-        this.obras = Objects.nonNull(obras) ? obras : new LinkedHashSet<>();
+        this.pessoa = pessoa;
+        this.obras = Objects.nonNull( obras ) ? obras : new LinkedHashSet<>();
     }
 
 
     public Author addObra(Book b) {
-        obras.add(b);
+        obras.add( b );
         return this;
     }
 
     public Author removeObra(Book b) {
-        obras.remove(b);
+        obras.remove( b );
         return this;
     }
 
     public Set<Book> getObras() {
-        return Collections.unmodifiableSet(obras);
+        return Collections.unmodifiableSet( obras );
     }
 
     public Long getId() {
@@ -63,21 +64,13 @@ public class Author {
         return this;
     }
 
-    public String getName() {
-        return name;
+
+    public PessoaFisica getPessoa() {
+        return pessoa;
     }
 
-    public Author setName(String name) {
-        this.name = name;
+    public Author setPessoa(PessoaFisica pessoa) {
+        this.pessoa = pessoa;
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Author{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", obras=" + obras +
-                '}';
     }
 }

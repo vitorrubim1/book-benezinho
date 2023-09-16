@@ -1,45 +1,39 @@
 package br.com.fiap;
 
-import br.com.fiap.domain.entity.Author;
-import br.com.fiap.domain.entity.Book;
+import br.com.fiap.domain.entity.Pessoa;
+import br.com.fiap.domain.entity.PessoaFisica;
+import br.com.fiap.domain.entity.PessoaJuridica;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-import javax.swing.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
 
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("oracle");
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory( "maria-db" );
         EntityManager manager = factory.createEntityManager();
 
-        //  addDados(manager);
-        //   var aut = new Author("Paulo Coelho");
 
-        manager.createQuery("FROM Author", Author.class).getResultList().forEach(System.out::println);
+        Pessoa bene = new PessoaFisica();
+        bene.setNome( "Benefrancis do Nascimento" ).setNascimento( LocalDate.of( 1977, 03, 8 ) );
+        ((PessoaFisica) bene).setCpf( "2135465465" );
+
+
+        Pessoa holding = new PessoaJuridica();
+        holding.setNome( "Benezinho Holding" ).setNascimento( LocalDate.now().minusYears( 5 ) );
+        ((PessoaJuridica) holding).setCnpj( "2132123132/0001-30" );
+
+
+        manager.getTransaction().begin();
+        manager.persist( bene );
+        manager.persist( holding );
+        manager.getTransaction().commit();
 
         manager.close();
         factory.close();
     }
 
-    private static void addDados(EntityManager manager) {
-        String nome = JOptionPane.showInputDialog("Autor");
-        String book = JOptionPane.showInputDialog("Livro");
 
-        var author = new Author(nome);
-
-        var livro = new Book();
-        livro.setName(book)
-                .setLancamento(LocalDate.now())
-                .setISBN(UUID.randomUUID().toString())
-                .addAuthor(author);
-
-        manager.getTransaction().begin();
-        manager.persist(livro);
-        manager.getTransaction().commit();
-    }
 }
