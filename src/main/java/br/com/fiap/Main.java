@@ -8,11 +8,13 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
 
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory( "maria-db" );
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory( "oracle", getProperties() );
         EntityManager manager = factory.createEntityManager();
 
 
@@ -35,5 +37,21 @@ public class Main {
         factory.close();
     }
 
+
+    private static Map<String, Object> getProperties() {
+        Map<String, String> env = System.getenv();
+        Map<String, Object> properties = new HashMap<>();
+
+        for (String chave : env.keySet()) {
+            if (chave.contains( "USER_FIAP" )) {
+                properties.put( "jakarta.persistence.jdbc.user", env.get( chave ) );
+            }
+            if (chave.contains( "PASSWORD_FIAP" )) {
+                properties.put( "jakarta.persistence.jdbc.password", env.get( chave ) );
+            }
+            // Outras configurações de propriedade ....
+        }
+        return properties;
+    }
 
 }
