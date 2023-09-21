@@ -37,7 +37,7 @@ public class PessoaFisicaRepository implements Repository<PessoaFisica, Long> {
 
     @Override
     public List<PessoaFisica> findByName(String name) {
-        String jpql = "FROM PessoaFisica p WHERE p.name =: name";
+        String jpql = "FROM PessoaFisica p WHERE Lower(p.name) =: name";
         EntityManager manager = factory.createEntityManager();
 
         Query query = manager.createQuery(jpql);
